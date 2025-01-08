@@ -1,24 +1,27 @@
 import tkinter as tk
 from tkinter import messagebox
 
+
+# Создание основного окна
+root = tk.Tk()
+root.title("Крестики-Нолики")
+
+
 # Инициализация основной переменной
 current_player = 'X'
 game_over = False
-board = [['' for _ in range(3)] for _ in range(3)]
+board = [['' for i in range(3)] for j in range(3)] #Создаем пустое поле 3х3
+
+# Создание кнопок
+buttons = [[None for i in range(3)] for j in range(3)]
+for i in range(3):
+    for j in range(3):
+        buttons[i][j] = tk.Button(root, text='', font=('Arial', 24), width=5, height=2,command=lambda row=i, col=j: on_click (row, col))
+        buttons[i][j].grid(row=i, column=j)
 
 
-def reset_game():
-    global current_player, game_over, board
-    current_player = 'X'
-    game_over = False
-    board = [['' for _ in range(3)] for _ in range(3)]
-    for i in range(3):
-        for j in range(3):
-            buttons[i][j].config(text='')  # Очищаем текст кнопок
-            buttons[i][j]['state'] = 'normal'  # Включаем кнопки
 
-
-def make_move(row, col):
+def on_click (row, col):
     global current_player, game_over
 
     if board[row][col] == '' and not game_over:
@@ -49,16 +52,17 @@ def check_winner():
         return True
     return False
 
-# Создание основного окна
-root = tk.Tk()
-root.title("Крестики-Нолики")
 
-# Создание кнопок
-buttons = [[None for _ in range(3)] for _ in range(3)]
-for i in range(3):
-    for j in range(3):
-        buttons[i][j] = tk.Button(root, text='', font=('Arial', 24), width=5, height=2,command=lambda row=i, col=j: make_move(row, col))
-        buttons[i][j].grid(row=i, column=j)
+
+def reset_game():
+    global current_player, game_over, board
+    current_player = 'X'
+    game_over = False
+    board = [['' for c in range(3)] for r in range(3)]
+    for i in range(3):
+        for j in range(3):
+            buttons[i][j].config(text='')  # Очищаем текст кнопок
+            buttons[i][j]['state'] = 'normal'  # Включаем кнопки
 
 # Кнопка для сброса игры
 reset_button = tk.Button(root, text='Сбросить игру', font=('Arial', 14), command=reset_game)

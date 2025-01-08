@@ -3,11 +3,11 @@ from tkinter import messagebox
 
 window = tk.Tk()
 window.title("Крестики-нолики")
-window.geometry("300x350")
+window.geometry("300x300")
 
 current_player = "X"
 buttons = []
-
+game_over = False
 
 def check_winner():
    for i in range(3):
@@ -24,8 +24,15 @@ def check_winner():
    return False
 
 
+def check_draw():
+    for row in buttons:
+        for button in row:
+            if button["text"] == "":
+                return False
+    return True
+
 def on_click(row, col):
-   global current_player
+   global current_player, game_over
 
    if buttons[row][col]['text'] != "":
        return
@@ -33,18 +40,36 @@ def on_click(row, col):
    buttons[row][col]['text'] = current_player
 
    if check_winner():
-       messagebox.showinfo("Игра окончена",f"Игрок {current_player} победил!")
-
-   current_player = "0" if current_player == "X" else "X"
+       messagebox.showinfo("Игра окончена", f"Игрок {current_player} победил!")
+       game_over = True
+   elif check_draw():
+       messagebox.showinfo("Игра окончена", "Ничья!")
+       game_over = True
+   else:
+       current_player = "0" if current_player == "X" else "X"
 
 
 for i in range(3):
    row = []
    for j in range(3):
-       btn = tk.Button(window, text="", font=("Arial", 20), width=5, height=2, command=lambda r=i, c=j: on_click(r, c))
+       btn = tk.Button(window, text="", font=("Arial", 20), width=5, height=2, command=lambda row=i, col=j: on_click(row, col))
        btn.grid(row=i, column=j)
        row.append(btn)
    buttons.append(row)
+
+def reset_game():
+    global current_player, game_over
+    current_player = 'X'
+    game_over = False
+
+    for i in range(3):
+        for j in range(3):
+            buttons[i][j].config(text='')  # Очищаем текст кнопок
+            buttons[i][j]['state'] = 'normal'  # Включаем кнопки
+
+# Кнопка для сброса игры
+reset_button = tk.Button(window, text='Сбросить игру', font=('Arial', 14), command=reset_game)
+reset_button.grid(row=3, column=0, columnspan=3)
 
 
 window.mainloop()
