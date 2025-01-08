@@ -45,6 +45,12 @@ def on_click(row, col):
 
    buttons[row][col]['text'] = current_player
 
+   # Изменяем цвет фона клетки в зависимости от игрока
+   if current_player == "X":
+       buttons[row][col].config(bg="blue")
+   else:
+       buttons[row][col].config(bg="red")
+
    if check_winner():
        messagebox.showinfo("Игра окончена", f"Игрок {current_player} победил!")
        if current_player == "X":
@@ -82,6 +88,7 @@ def reset_game():
         for j in range(3):
             buttons[i][j].config(text='')  # Очищаем текст кнопок
             buttons[i][j]['state'] = 'normal'  # Включаем кнопки
+            buttons[i][j].config(bg='SystemButtonFace')  # Сбрасываем цвет фона
 
 # Кнопка для сброса игры
 reset_button = tk.Button(window, text='Очистить поле', font=('Arial', 14), command=reset_game)
