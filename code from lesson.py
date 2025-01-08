@@ -3,11 +3,17 @@ from tkinter import messagebox
 
 window = tk.Tk()
 window.title("Крестики-нолики")
-window.geometry("300x300")
+window.geometry("280x400")
 
 current_player = "X"
 buttons = []
 game_over = False
+score_x = 0
+score_o = 0
+
+# Метки для отображения счёта
+score_label = tk.Label(window, text=f"X: {score_x}  O: {score_o}", font=("Arial", 14))
+score_label.grid(row=4, column=0, columnspan=3)
 
 def check_winner():
    for i in range(3):
@@ -32,7 +38,7 @@ def check_draw():
     return True
 
 def on_click(row, col):
-   global current_player, game_over
+   global current_player, game_over, score_x, score_o
 
    if buttons[row][col]['text'] != "":
        return
@@ -41,12 +47,22 @@ def on_click(row, col):
 
    if check_winner():
        messagebox.showinfo("Игра окончена", f"Игрок {current_player} победил!")
-       game_over = True
+       if current_player == "X":
+           score_x += 1
+       else:
+           score_o += 1
+       score_label.config(text=f"X: {score_x}  O: {score_o}")
+
+       if score_x >= 3 or score_o >= 3:
+           messagebox.showinfo("Игра окончена", f"Игрок {current_player} выиграл игру до 3 побед!")
+           reset_game()
+       else:
+           game_over = True
    elif check_draw():
        messagebox.showinfo("Игра окончена", "Ничья!")
        game_over = True
    else:
-       current_player = "0" if current_player == "X" else "X"
+       current_player = "O" if current_player == "X" else "X"
 
 
 for i in range(3):
@@ -68,7 +84,7 @@ def reset_game():
             buttons[i][j]['state'] = 'normal'  # Включаем кнопки
 
 # Кнопка для сброса игры
-reset_button = tk.Button(window, text='Сбросить игру', font=('Arial', 14), command=reset_game)
+reset_button = tk.Button(window, text='Очистить поле', font=('Arial', 14), command=reset_game)
 reset_button.grid(row=3, column=0, columnspan=3)
 
 
