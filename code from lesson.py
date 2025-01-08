@@ -87,5 +87,16 @@ def reset_game():
 reset_button = tk.Button(window, text='Очистить поле', font=('Arial', 14), command=reset_game)
 reset_button.grid(row=3, column=0, columnspan=3)
 
+# Функция для сброса счета
+def reset_score():
+    global score_x, score_o
+    score_x = 0
+    score_o = 0
+    score_label.config(text=f"X: {score_x}  O: {score_o}")
+
+# Кнопка для сброса счета
+reset_score_button = tk.Button(window, text='Сбросить игру', font=('Arial', 14), command=reset_score)
+reset_score_button.grid(row=5, column=0, columnspan=3)
+
 
 window.mainloop()
